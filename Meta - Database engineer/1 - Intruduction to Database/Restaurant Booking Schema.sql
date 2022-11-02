@@ -1,15 +1,17 @@
 -- This database is an exercise from Meta Database Enginner Course - 1 Module, Week 4 
 
 -- Obs1: The table and the primary key of the table must be created before of the assignment of the foreign key in another table.
--- Tip1: Firs create the tables that don't have any foreign keys.
+-- Tip1: First create the tables that don't have any foreign keys.
 
 DROP DATABASE IF EXISTS meta_restaurant;
 
 CREATE DATABASE meta_restaurant;
 
+USE meta_restaurant;
+
 CREATE TABLE tbl( 
 
-    table_id INT PRIMARY KEY, /* I can define the primary key when i'm assigning the data type of table_id */
+    table_id INT PRIMARY KEY, /* 1- I can define the primary key when i'm assigning the data type of table_id */
 
     location VARCHAR(255) 
 
@@ -23,7 +25,7 @@ CREATE TABLE menu(
 
     availability INT, 
 
-    PRIMARY KEY (menu_id) 
+    PRIMARY KEY (menu_id) /* 2- Or i assign the primary key after everything */
 
 ); 
 
@@ -37,7 +39,7 @@ CREATE TABLE waiter(
 
     shift VARCHAR(10), 
 
-    PRIMARY KEY (waiter_id) /* Or i assign the primary key after everything */
+    PRIMARY KEY (waiter_id) 
 
 ); 
 
