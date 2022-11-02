@@ -1,4 +1,4 @@
--- This database is an exercise from Meta Database Enginner Course - 1 Module, Week 4 
+-- This database is the exercise number 1 from Meta Database Enginner Course - 1 Module, Week 4 (1)
 
 -- Obs1: The table and the primary key of the table must be created before of the assignment of the foreign key in another table.
 -- Tip1: First create the tables that don't have any foreign keys.
