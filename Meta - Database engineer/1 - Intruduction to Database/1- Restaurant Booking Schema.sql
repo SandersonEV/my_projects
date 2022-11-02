@@ -39,7 +39,7 @@ CREATE TABLE waiter(
 
     shift VARCHAR(10), 
 
-    PRIMARY KEY (waiter_id) 
+    CONSTRAINT PK_waiter PRIMARY KEY (waiter_id) /* 3- In this case i wrote just to show the possibilite but if you write like this maybe you want to create a composite primary key like (ID,Name) */ 
 
 ); 
 
@@ -131,5 +131,4 @@ CREATE TABLE order_menu_item(
 
     FOREIGN KEY (menu_item_id) REFERENCES menu_item(menu_item_id) 
 
-); 
-
+);
