@@ -1,0 +1,41 @@
+Aqui estarão listados alguns dos comandos usados durante o curso Version Control ministrado pela Meta.
+Baixar o Git Bash
+
+
+pwd = expõe o caminho da pasta atual
+cd ~ = voltar para a pasta raiz
+cd [path] = serve para navegar entre os diret´rios
+cd .. = volta 
+cd ../[path] = volta para o diretório original e entra dentro do /[path] pertencente ao diretório original
+clear = limpar o prompt
+dir = mostrar os arquivos daquela pasta
+mkdir = criar uma nova pasta
+touch = criar um novo arquivo (ex: teste.txt)
+ls = mostra os arquivos da pasta atual e os identifica por cores e / (pastas, leitura, link...)
+  -> ls -l = mostra os arquivos em forma de lista, os identifica e mostra mais detalhes, como data de criação e tamnanho
+  -> ls -la = mostra tudo que existe dentro da pasta, inclusive os arquivos que estão ocultos e seus detalhes.
+        -> r=read,w=write,x=executável
+ls [endereço] = lista os arquivos do endereço especificado
+chmod 755 [arquivo] = Faz com que agora o arquivo torne-se um executável (adicionando um x quando executado o  comando ls -la)
+less [arquivo] = ABRE o conteúdo do arquivo 
+  -> Aperte Q para sair do modo leitura.
+cat [arquivo da pasta] = lê o conteudo do arquivo e o mostra no prompt como um output
+mv [file1] [endereço do diretório destino] = move o file1 para o endereço especificado
+
+-- PIPES ( | ) -- pass the output from one command to the next command -- it's like f(z(x))
+Executa uma serie de comandos especificados no pipe de um a um
+exemplo:
+ls = list files
+wc -w = count files
+ls |wc -w = list and count the files in the path
+__________
+
+grep So testbash.txt = faz a busca pelos nomes que iniciam (se não obtiver resultados ele busca o 'So' fora do começo) pelo "So" (case sensitive) dento do arquivo testbash.txt
+grep -i So testbash.txt = faz a busca pelo "So" (-i = ignora case sensitive) dento do arquivo testbash.txt
+grep -w So testbash.txt = faz a busca pelo "So" (-w = exatamente como está escrito) dento do arquivo testbash.txt
+
+-- PIPE + GREP --
+ls testbash | grep tes = lista apenas os arquivos que iniciam com 'tes'
+__________________
+
+
