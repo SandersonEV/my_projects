@@ -1,0 +1,32 @@
+Here are the most useful commands to use in work:
+1 - touch = create a new file
+
+2 - cd .. ; cd ../.. = to move between files
+
+3 - vim <file.txt> = open and edit files (ESC, :q,:w, :a ...)
+
+4 - Git add <file> = start to track the file
+
+5 - Git commit -m '<message>' = send a commit for the tracked files (the commit is just in your divice)
+
+6 - Git push -u <branch> = Push the commit for the specific branch and change to this branch
+
+7 - Git pull = get updated all the new changes
+
+8 - Git branch <branch> = just create a new branch 
+
+9 - Git checkout -b <BranchName> = create a new branch and change to this created branch
+
+10 - Git init = initialize a new local repository created (mkdir then Git init) - is only available in your machine repository
+
+11 - Git Clone <link> = Copy the repository
+
+12 Git HEAD
+
+13 - Git Diff = look the differences between files, branches...
+
+14 - Git Blame = look who, when, and what is the changes in detais
+
+15 - Git log - look all commits before of push 
+
+(Obs: The main difference between create a new branch and fork is that with the fork you just create a copy of the repository and cannot merge after the changes. You just copy to use. If the original repository was deleted the fork still remain)
