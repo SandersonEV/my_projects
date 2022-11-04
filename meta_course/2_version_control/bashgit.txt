@@ -25,4 +25,6 @@ Here are the most useful commands to use in work:
 
 13 - Git Diff = look the differences between files, branches...
 
-14 Git Blame = look who, when, and what is the changes in detais
+14 - Git Blame = look who, when, and what is the changes in detais
+
+(Obs: The main difference between create a new branch and fork is that with the fork you just create a copy of the repository and cannot merge after the changes. You just copy to use)
