@@ -1,0 +1,10 @@
+All this text is writed using the terminal.
+
+-- Steps when you create a new file -- 
+1 - create new file (ex test.txt)
+  1.1 - if you want to write on txt use 'cat > or cat >>'
+2 - Start to track the changes in the file using the 'Git add command'
+  2.2 - if you change your mid and want to ''[Duntrack' the file use ''[DGit restore --stage test.txt'
+3 - Now you shoul commit and it's a good practice to always write a message so your team menbers know what you did
+  3.1[A[1[B[B - Git Commit -m[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C''[DEssa é uma mensagem exemplo para o commit'
+4 - Git push para fazesubir as modificações para o Github
