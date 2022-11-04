@@ -1,0 +1,18 @@
+Here are the most useful commands to use in work:
+1 - touch = create a new file
+
+2 - cd .. ; cd ../.. = to move between files
+
+3 - vim <file.txt> = open and edit files (ESC, :q,:w, :a ...)
+
+4 - Git add <file> = start to track the file
+
+5 - Git commit -m '<message>' = send a commit for the tracked files (the commit is just in your divice)
+
+6 - Git push -u <branch> = Push the commit for the specific branch and change to this branch
+
+7 - Git pull = get updated all the new changes
+
+7 - Git branch <branch> = just create a new branch 
+
+8 - Git checkout -b <BranchName> = create a new branch and change to this created branch
