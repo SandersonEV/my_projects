@@ -13,6 +13,16 @@ Here are the most useful commands to use in work:
 
 7 - Git pull = get updated all the new changes
 
-7 - Git branch <branch> = just create a new branch 
+8 - Git branch <branch> = just create a new branch 
 
-8 - Git checkout -b <BranchName> = create a new branch and change to this created branch
+9 - Git checkout -b <BranchName> = create a new branch and change to this created branch
+
+10 - Git init = initialize a new local repository created (mkdir then Git init) - is only available in your machine repository
+
+11 - Git Clone <link> = Copy the repository
+
+12 Git HEAD
+
+13 - Git Diff = look the differences between files, branches...
+
+14 Git Blame = look who, when, and what is the changes in detais
