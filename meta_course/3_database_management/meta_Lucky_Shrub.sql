@@ -4,7 +4,9 @@ CREATE DATABASE meta_Lucky_Shrub;
 
 USE meta_Lucky_Shrub;
 
-CREATE TABLE Orders (
+DROP TABLE IF EXISTS orders;
+
+CREATE TABLE orders (
 OrderID INT NOT NULL PRIMARY KEY,
 ClientID VARCHAR(10),
 ProductID VARCHAR(10),
@@ -12,7 +14,7 @@ Quantity   INT,
 Cost DECIMAL(6,2)
 );
 
-INSERT INTO Orders (OrderID, ClientID, ProductID , Quantity, Cost) VALUES 
+INSERT INTO orders (OrderID, ClientID, ProductID , Quantity, Cost) VALUES 
 (1, "Cl1", "P1", 10, 500), 
 (2, "Cl2", "P2", 5, 100), 
 (3, "Cl3", "P3", 20, 800), 
@@ -23,6 +25,8 @@ INSERT INTO Orders (OrderID, ClientID, ProductID , Quantity, Cost) VALUES
 (8, "Cl3", "P1", 15, 150), 
 (9, "Cl1", "P1", 10, 500), 
 (10, "Cl2", "P2", 5, 100);
+
+DROP TABLE IF EXISTS employees;
 
 CREATE TABLE employees (
   EmployeeID int NOT NULL,
@@ -42,6 +46,24 @@ INSERT INTO employees VALUES /* You don't need to specify the columns name after
 (5,'Emily Sierra', 'Customer Service', '351083098','Emily.s@ luckyshrub.com',35000), 
 (6,'Maria Carter', 'Human Resources', '351022508','Maria.c@ luckyshrub.com',55000),
 (7,'Rick Griffin', 'Marketing', '351478458','Rick.G@luckyshrub.com',50000);
+
+DROP TABLE IF EXISTS clients;
+
+CREATE TABLE clients(
+ClientID CHAR(3) PRIMARY KEY,
+FullName VARCHAR (100),
+ContactNumber INT (9),
+Address VARCHAR (255)
+);
+
+INSERT INTO clients VALUES 
+('Cl1','Takashi Ioto', 351786345,'724 Greenway Drive'),
+('Cl2','Jane Murphy', 351567243,'102 Sycamore Lane'),
+('Cl3','Laurina Delgado', 351342597,'291 Oak Wood Avenue'),
+('Cl4','Benjamin Clauss', 351342509,'831 Beechwood Terrace'),
+('Cl5','Altay Ayhan', 351208983,'755 Palm Tree Hills'),
+('Cl6','Greta Galkina', 351298755,'831 Beechwood Terrace');
+
 
 -- Just some basic commands down here ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -96,5 +118,5 @@ WHERE x.column2 < 12 AND column2 < 5;
 */
 -- --------------------------------------------------------------------------------------- JOINs ---------------------------------------------------------------------------------------------------------
 
-CREATE TABLE 
+SELECT * FROM X
 
