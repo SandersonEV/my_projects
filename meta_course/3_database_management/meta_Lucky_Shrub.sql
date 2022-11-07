@@ -173,6 +173,7 @@ INNER JOIN employees e2 ON e1.LineManagerID = e2.EmployeeID;
 -- To test UNION FUNCTION i'll create one more table (clientsUnion) similar to the clients , the unique difference is the data in the rows
 -- UNION - Two similar tables thogether in one without rows equals
 -- UNION ALL - Two tables
+-- The related columns in every SELECT statement must be in the same order
 
 DROP TABLE IF EXISTS clientsUnion;
 
@@ -191,13 +192,29 @@ INSERT INTO clientsUnion VALUES -- I'll keep some of the rows in this table equa
 ('Cl9','Samuel dos Santos', 082584695,'Rua São Jorge 255'), -- totally different row.
 ('Cl10','Karina Andrade', 082854475,'Rua do comércio 25'); -- totally different row.
 
+-- UNION
 SELECT * FROM clients 
 UNION
 SELECT * FROM clientsUnion; -- We can see in the results of the UNION that this function only shows the distinct rows (partial different and the totally different)
 
+SELECT ClientID ID, Address Endereço FROM clients  
+UNION
+SELECT ClientID ID, Address Endereço FROM clientsUnion; /* Looking to the results into ID we'll se that the Cl1 and Cl2 appear just one time (DISTINCT) but the Cl7,Cl8 and the respective address appear two times 
+because the columns specified in the select statment (ClientID and Address) are diffent but the other two columns (FullName and ContactNumber) are equals.*/
+
+SELECT FullName Nome, ContactNumber Contato FROM clients 
+UNION
+SELECT FullName Nome, ContactNumber Contato FROM clientsUnion; -- Because he only shows DISTINCT values that are in the columns that you specify in the SELECT He excludes the duplicates (Takashi, Jane, Laurina and Benjamin)
+
+
+-- UNION ALL  -- the columns that you choose in the SELECT must have the same datatype (the allowed quantity can variate) an both select should have the same quantity of columns
 SELECT * FROM clients 
 UNION ALL
 SELECT * FROM clientsUnion; -- We can see in the results of the UNION ALL that this function shows everything (totally equal, partial different and totally different rows)
+
+SELECT FullName Nome, ContactNumber Contato FROM clients
+UNION ALL
+SELECT FullName Nome, ContactNumber Contato FROM clientsUnion; -- You'll see repeated results (UNION ALL)
 
 
 
