@@ -37,8 +37,15 @@ INSERT INTO Bookings (BookingID, BookingDate, TableNumber, NumberOfGuests, Custo
 /* Task 1: Little Lemon want a list of all customers who have made bookings. Write an INNER JOIN SQL statement to combine the full name and the phone number of each customer
  from the Customers table with the related booking date and 'number of guests' from the Bookings table. */
  
+SELECT c.FullName Nome, c.PhoneNumber Telefone, b.BookingDate 'Data da Reserva', b.NumberOfGuests 'Número de Convidados'
+FROM customers c INNER JOIN bookings b 
+ON c.CustomerID = b.CustomerID;
  
-
+ /* Task 2: Little Lemon want to view information about all existing customers with bookings that have been made so far. This data must include customers who haven’t made any booking yet. */
+ 
+SELECT c.FullName Nome, c.PhoneNumber Telefone, b.TableNumber , b.BookingDate 'Data da Reserva', b.NumberOfGuests 'Número de Convidados'
+FROM customers c LEFT JOIN bookings b 
+ON c.CustomerID = b.CustomerID;
 
 
 
