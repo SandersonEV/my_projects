@@ -151,7 +151,7 @@ You should make a self join to see the data of the partner (like the name) */
 
 /* In the next steps i'll create a new column (LineManagerID) in the employees table and I'll create a relation with EmployeeID column in the same table to show a exemple of a self join */
 ALTER TABLE employees ADD LineManagerID INT;
-ALTER TABLE employees ADD FOREIGN KEY (LineManagerID) REFERENCES employees(EmployeeID);
+ALTER TABLE employees ADD FOREIGN KEY (LineManagerID) REFERENCES employees(EmployeeID); -- ADDs the foreign key after the creation of the table
 
 /* Now i'll update the rows to insert new data in the LineManagerId (that is a foreign key of the EmployeeID in the same table)*/
 UPDATE employees SET LineManagerID = 3 WHERE EmployeeID = 1;
@@ -170,7 +170,34 @@ FROM employees e1
 INNER JOIN employees e2 ON e1.LineManagerID = e2.EmployeeID;
 
 -- ------------------------------------------------- UNION ----------------------------------------------------------------
+-- To test UNION FUNCTION i'll create one more table (clientsUnion) similar to the clients , the unique difference is the data in the rows
+-- UNION - Two similar tables thogether in one without rows equals
+-- UNION ALL - Two tables
 
+DROP TABLE IF EXISTS clientsUnion;
+
+CREATE TABLE clientsUnion(
+ClientID CHAR(4) PRIMARY KEY, -- I needed to increase the number in the char to 4 characters because of the lenght of one clientID 'Cl10'
+FullName VARCHAR (100),
+ContactNumber INT (9),
+Address VARCHAR (255)
+);
+
+INSERT INTO clientsUnion VALUES -- I'll keep some of the rows in this table equals to other rows in the clients table to demonstrate the UNION ALL function.
+('Cl1','Takashi Ioto', 351786345,'724 Greenway Drive'), -- totally equal row.
+('Cl2','Jane Murphy', 351567243,'102 Sycamore Lane'), -- totally equal row.
+('Cl7','Laurina Delgado', 351342597,'Rua Coronel Machado 56'), -- partial different row - I left the Contact and the Name equals to the data in the clients table to see the results.
+('Cl8','Benjamin Clauss', 351342509,'Rua da Praia do Frances 58'), -- partial different row - I left the Contact and the Name equals to the data in the clients table to see the results.
+('Cl9','Samuel dos Santos', 082584695,'Rua São Jorge 255'), -- totally different row.
+('Cl10','Karina Andrade', 082854475,'Rua do comércio 25'); -- totally different row.
+
+SELECT * FROM clients 
+UNION
+SELECT * FROM clientsUnion; -- We can see in the results of the UNION that this function only shows the distinct rows (partial different and the totally different)
+
+SELECT * FROM clients 
+UNION ALL
+SELECT * FROM clientsUnion; -- We can see in the results of the UNION ALL that this function shows everything (totally equal, partial different and totally different rows)
 
 
 
