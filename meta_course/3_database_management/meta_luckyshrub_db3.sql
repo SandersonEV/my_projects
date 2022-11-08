@@ -84,6 +84,9 @@ VALUES(1,3,"In Progress",200),
 (14,5,"Not Recieved",300), 
 (14,4,"Not Recieved",250); 
 
+
+-- -------------------------------------------------------------------------- EXTRA TASKS for WEEK 1 ----------------------------------------------------------------------------------------------------------
+
 -- Task1: Use the ANY operator to identify all employees with the Order Status status 'Completed'. 
 /* 
 The ANY operator returns a boolean value following a comparison operation. It returns a TRUE value if ANY subquery values meet the given condition. 
@@ -169,3 +172,31 @@ FROM employee_orders 
 WHERE HandlingCost > ALL(SELECT ROUND(OrderTotal/100 * 20) AS twentyPercent FROM orders  GROUP BY OrderTotal  
 HAVING twentyPercent > 100)  GROUP BY EmployeeID,HandlingCost;     
 */
+
+-- ---------------------------------------------------------------------------- WEEK 2 -------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS EmployeeContactInfo;
+
+CREATE TABLE EmployeeContactInfo(
+EmployeeID INT NOT NULL PRIMARY KEY auto_increment, -- AUTO_INCREMENT is used on primary key to auto generate and increment the id every time you insert a new row, so you don't need to type by hand every time.
+ContactNumber INT DEFAULT 351457856, -- Set a default value
+Email VARCHAR(255)
+);
+
+INSERT INTO EmployeeContactInfo(ContactNumber, Email) VALUES -- As the ID is auto incremented, he shouldn't be typed he'll be auto_generated every time you insert a new row.
+(351457860,'san@luckyshub.com');
+
+/* You can also insert a new row using the REPLACE command but the EmployeeID column must not exist!
+(You defined the primary key as Auto_generate so the replace function will always insert new data if you don't specify the EmployeeId).
+The column EmployeeID is used to define if the REPLACE will create a new row or change a existing row.
+*/ 
+REPLACE INTO EmployeeContactInfo(ContactNumber, Email) VALUES
+(351584752,'samuel@luckyshub.com'); -- As you don't define the EmployeeId, the raplace function will create a new row and auto_increment the EmployeeID using the last ID row. In other words, he acts as a INSERT INTO function.
+
+REPLACE INTO EmployeeContactInfo(EmployeeID,ContactNumber, Email) VALUES
+(2, 351444555,'replace@luckyshub.com'); /* When you define the EmployeeID (primary key) in the columns and type the value of the primary key, if the typed  value of the EmployeeID already exists,
+ the replace function works changing the row with the new data in the VALUES. */
+ 
+REPLACE INTO EmployeeContactInfo SET ContactNumber = 351888999, Email = 'supsup@luckyshub.com'; -- other way to Use the replace function
+REPLACE INTO EmployeeContactInfo SET ContactNumber = 351666777; -- You can also insert NULL data just letting empty.
+REPLACE INTO EmployeeContactInfo SET EmployeeID = 1, ContactNumber = 351222666; -- or replace a row data with a NULL value
+
