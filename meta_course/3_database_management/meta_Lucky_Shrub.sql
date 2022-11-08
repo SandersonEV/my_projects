@@ -216,6 +216,47 @@ SELECT FullName Nome, ContactNumber Contato FROM clients
 UNION ALL
 SELECT FullName Nome, ContactNumber Contato FROM clientsUnion; -- You'll see repeated results (UNION ALL)
 
+-- ------------------------------------------------------------------------ ALTER TABLE -------------------------------------------------------------------------
+-- Practice some Alter table functions
 
+DROP TABLE IF EXISTS Machinery;
+
+CREATE TABLE Machinery(
+EmployeeID VARCHAR(10),
+FullName VARCHAR(100),
+Country VARCHAR(100),
+PhoneNumber INT
+);
+SHOW COLUMNS FROM Machinery;
+
+ALTER TABLE Machinery -- The ALTER TABLE used with the MODIFY function works to alter the constraints of the columns.
+MODIFY EmployeeID VARCHAR(100) NOT NULL PRIMARY KEY,
+MODIFY FullName VARCHAR(100) NOT NULL,
+MODIFY Country VARCHAR(100) NOT NULL,
+MODIFY PhoneNumber INT NOT NULL UNIQUE;
+SHOW COLUMNS FROM Machinery;
+
+ALTER TABLE Machinery ADD COLUMN Age INT CHECK(Age >= 18); -- The ALTER TABLE now is used to ADD a new COLUMN in the table. 
+SHOW COLUMNS FROM Machinery;
+
+-- ----------------------------------------------------------------------- COPY TABLEs ---------------------------------------------------------------------------------
+-- You have 3 possibilities after copy a table:
+
+-- 2 - Copy table with constraints
+-- 3 - Copy existing table data to a new database
+
+-- 1 - Copy an existing table's data to a new table
+/*  It's is just a SELECT inside of a CREATE TABLE:
+CREATE TABLE new_table
+SELECT columns...alter
+FROM existing_table; 
+*/
+
+-- 3 - Copy existing table data to a new database 
+/*  It's is just a SELECT inside of a CREATE TABLE and you need to specify the databases of the tables:
+CREATE TABLE database_name.new_table
+SELECT columns...alter
+FROM database2_name.existing_table; 
+*/
 
 

@@ -43,6 +43,8 @@ INSERT INTO Orders VALUES
 (20,'Decking','2022-06-25',150,1450),
 (21,'Decking','2022-06-25',150,1450);
 
+-- ------------------------------------------------------------------------------------- WEEK 1 ----------------------------------------------------------------------------------
+
 -- Task 1: Write a SQL SELECT statement to group all records that have the same order date
 -- I'll increment query asked in the course to see more interesting informations:
 

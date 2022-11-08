@@ -6,8 +6,8 @@ USE meta_little_lemon;
 
 CREATE TABLE Customers(
 CustomerID INT NOT NULL PRIMARY KEY,
-FullName VARCHAR(100) NOT NULL,
-PhoneNumber INT NOT NULL UNIQUE
+FullName VARCHAR(100) NOT NULL, 
+PhoneNumber INT NOT NULL UNIQUE -- The unique constraint means that no other row in the column can hold the same data.
 );
 
 INSERT INTO Customers(CustomerID, FullName, PhoneNumber) VALUES 
@@ -21,7 +21,7 @@ CREATE TABLE Bookings (
 BookingID INT NOT NULL PRIMARY KEY,
 BookingDate DATE NOT NULL,
 TableNumber INT NOT NULL,
-NumberOfGuests INT NOT NULL CHECK (NumberOfGuests <= 8),
+NumberOfGuests INT NOT NULL CHECK (NumberOfGuests <= 8), -- The CHECK is used to limit the value that you can place in the column.
 CustomerID INT NOT NULL,
 FOREIGN KEY (CustomerID) REFERENCES Customers (CustomerID) ON DELETE CASCADE ON UPDATE CASCADE); /* This means that if the CustumerID in the Custumers table is deleted or updated the CustumerID
 in the Booking table also do the same thing (delete or update) */
@@ -47,5 +47,12 @@ SELECT c.FullName Nome, c.PhoneNumber Telefone, b.TableNumber , b.BookingDate 'D
 FROM customers c LEFT JOIN bookings b 
 ON c.CustomerID = b.CustomerID;
 
-
+-- ----------------------------------------------------------- WEEK 2 - constraints ------------------------------------------
+/*
+1- KEY CONSTRAINTS - PRIMARY KEY, FOREIGN KEY, UNIQUE...
+2- DOMAIN CONSTRAINTS - INT (3)
+3- REFERENTIAL INTEGRITY CONSTRAINTS -In a relational database, tables are connected via a foreign key in one table linked to a primary key (or a unique key) in another table. 
+This implies that the value of the foreign key column in the ‘referencing’ table must also exist in the referenced table. Otherwise, you will end up with a problem as the 
+“connection” between the records of the tables will cease.  
+*/
 
