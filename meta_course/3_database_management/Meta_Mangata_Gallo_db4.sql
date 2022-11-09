@@ -1,5 +1,3 @@
--- The main purpose of these database is to practice the creation of constraints
-
 DROP DATABASE IF EXISTS Meta_Mangata_Gallo;
 
 CREATE DATABASE Meta_Mangata_Gallo; 
@@ -69,4 +67,4 @@ FOREIGN KEY (StaffID) REFERENCES staffs(StaffID)
 );
 SHOW COLUMNS FROM ContractInfo; 
 
-
+-- --------------------------------------------- Changing table structure -----------------------------------------------------

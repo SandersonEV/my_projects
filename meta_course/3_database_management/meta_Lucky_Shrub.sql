@@ -241,9 +241,7 @@ SHOW COLUMNS FROM Machinery;
 
 -- ----------------------------------------------------------------------- COPY TABLEs ---------------------------------------------------------------------------------
 -- You have 3 possibilities after copy a table:
-
--- 2 - Copy table with constraints
--- 3 - Copy existing table data to a new database
+-- REMENBER: when you create a copy you should check the data types and the columns in the new table (depending on the command the keys are not copied to the new table)
 
 -- 1 - Copy an existing table's data to a new table
 /*  It's is just a SELECT inside of a CREATE TABLE:
@@ -252,11 +250,42 @@ SELECT columns...alter
 FROM existing_table; 
 */
 
--- 3 - Copy existing table data to a new database 
+-- 2 - Copy existing table data to a new database 
 /*  It's is just a SELECT inside of a CREATE TABLE and you need to specify the databases of the tables:
 CREATE TABLE database_name.new_table
 SELECT columns...alter
 FROM database2_name.existing_table; 
 */
 
+-- 3 - Copy table with constraints
+/*  only copy the columns and the constaints and not the rows
+CREATE TABLE table2_name LIKE existing_table;
+*/
 
+-- TASK 1 - Copy the clients(ClientID,FullName,ContactNumber) table to a new table in the same database with only 4 rows:
+DROP TABLE IF EXISTS clients2;
+CREATE TABLE clients2
+SELECT ClientID,FullName,ContactNumber
+FROM clients 
+LIMIT 4;
+
+SELECT * FROM clients2; -- OK with the fields data
+SHOW COLUMNS FROM clients2; -- The PRIMARY KEY is missing
+SHOW COLUMNS FROM clients; -- The keys are not copied to the new table and you should manually do this
+
+-- TASK 2 - Copy the columns, keys and constraints from the original table
+DROP TABLE IF EXISTS clients3; -- COPY all the columns and the constraints of the table but not the rows.
+CREATE TABLE clients3 LIKE clients;
+
+SELECT * FROM clients3;
+SHOW COLUMNS FROM clients3; -- OK
+SHOW COLUMNS FROM clients;  -- OK
+
+-- Obs: If you need to make a copy of a table from a specific database to another you should specify the DB and use the dot.alter
+DROP TABLE IF EXISTS meta_Lucky_Shrub.clients4;
+CREATE TABLE meta_Lucky_Shrub.clients4
+SELECT ClientID,FullName,ContactNumber
+FROM meta_Lucky_Shrub.clients;
+
+SELECT * FROM clients4;
+SHOW COLUMNS FROM clients4;

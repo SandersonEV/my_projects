@@ -56,3 +56,40 @@ This implies that the value of the foreign key column in the ‘referencing’ t
 “connection” between the records of the tables will cease.  
 */
 
+-- ------------------------------------------------------------------------------- EXTRA TASKS USING ALTER TABLE variations --------------------------------------------------------------------
+
+-- Create a new table in the Little Lemon restaurant database to store information about customers' orders. The new “Food Orders” table includes three columns:
+
+CREATE TABLE FoodOrders (
+OrderID INT, 
+Quantity INT, 
+Cost Decimal(4,2));
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 1: Use the ALTER TABLE statement with MODIFY command to make the OrderID the primary key of the 'FoodOrders' table. 
+ALTER TABLE foodorders MODIFY OrderID INT NOT NULL PRIMARY KEY;
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 2: Apply the NOT NULL constraint to the quantity and cost columns.
+ALTER TABLE foodorders MODIFY Quantity INT NOT NULL DEFAULT 0;
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 3: Create two new columns, OrderDate with a DATE datatype and CustomerID with an INT datatype. Declare both must as NOT NULL. Declare the CustomerID as a foreign key in the FoodOrders table to reference the CustomerID column existing in the Customers table.
+ALTER TABLE foodorders ADD COLUMN OrderDate DATE NOT NULL, ADD COLUMN CustomerID INT NOT NULL, ADD FOREIGN KEY (CustomerID) REFERENCES customers(CustomerID);
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 4: Use the DROP command with ALTER statement to delete the OrderDate column from the 'FoodOrder' table. 
+ALTER TABLE foodorders DROP COLUMN OrderDate;
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 5: Use the CHANGE command with ALTER statement to rename the COLUMN Quantity in the foodorders table to Quant. 
+ALTER TABLE foodorders CHANGE Quantity Quant INT NOT NULL DEFAULT 0;
+SHOW COLUMNS FROM FoodOrders;
+
+-- Task 6: Use the RENAME command with ALTER statement to change the TABLE NAME from foodorders to ifood.
+ALTER TABLE foodorders RENAME ifood;
+SHOW COLUMNS FROM ifood;
+
+
+
+ 
