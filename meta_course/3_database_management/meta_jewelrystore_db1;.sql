@@ -50,6 +50,11 @@ SELECT CONCAT(LCASE(i.Name), '-',mg.Quantity,'-', UCASE(mg.OrderStatus)) 'Task 1
 FROM item i
 INNER JOIN mg_orders mg ON i.ItemID = mg.ItemID;
 
+/* This second option was writhe by Meta teacher - is just a query for two table and don't use a join
+SELECT CONCAT(LCASE(Name),'-',Quantity,'-', UCASE(OrderStatus)) 
+FROM item,mg_orders 
+WHERE item.ItemID = mg_orders.ItemID;
+*/
 -- Task 2: Write a SQL SELECT query using an appropriate date function and a format string to find the name of the weekday on which M&G’s orders are to be delivered.
 
 SELECT date_format(DeliveryDate, '%W') 'Dia da Entrega' FROM mg_orders;
@@ -61,3 +66,5 @@ SELECT OrderID ID, ROUND(Cost*0.05,2) HandlingCost FROM mg_orders;
 -- Task 4: Review the query that you wrote in the second task. Use an appropriate comparison function to filter out the records that do not have a NULL value in the delivery date column.
 
 SELECT date_format(DeliveryDate, '%W') 'Dia da Entrega' FROM mg_orders WHERE DeliveryDate IS NOT NULL;
+
+SELECT DATE_FORMAT(DeliveryDate,'%W') FROM mg_orders WHERE !ISNULL(DeliveryDate) -- another way to query
