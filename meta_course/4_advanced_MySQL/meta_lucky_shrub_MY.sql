@@ -57,6 +57,7 @@ INSERT INTO products VALUES
 
 -- You should determine the data type to output. deterministic function means that this function always result in the same output every time they are called
 -- The propouse of this function is to apply a discount in the Cost and the IFs should select the right discount deppending of the Amount of the Cost.
+
 DELIMITER //
 CREATE FUNCTION GetTotalCost(Cost DECIMAL(10,2)) 
 RETURNS DECIMAL(10,2) DETERMINISTIC 
@@ -253,3 +254,81 @@ DELIMITER ;
 
 CALL GetDiscount2(5); -- TEST
 SELECT @priceAfterDiscount2; -- ok (output a variable in the procedure but fist you'll need to call the procedure with an OrderId)
+
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------- TRIGGERS -------------------------------------------------------------------------------------------
+-- Actions that happens after alteration on database this action can be: INSERT, UPDATE OR DELETE.alter.
+
+/* A TRIGGER can be invoked before of ater an action:
+    -> BEFORE = TRIGGER -> ACTION -> ROW (
+    -> AFTER  = ACTION  -> ROW    -> TRIGGER
+The syntax from both (bafore and after) triggers are the same.
+*/
+/* MySQL TRIGGER syntax:
+CREATE TRIGGER trigger_name
+BEFORE INSERT -- Here you should specify when the TRIGGER will work (before or after) and the command to look (insert, delete or update)
+ON table_name FOR EACH ROW -- A table to watch and how the trigger will perform (in each row of the table)
+BEGIN
+	
+END
+
+*/
+
+-- For exemple: let's say that Luck Shrub need that none negative number can be inputed in the orders.Quantity field and if it's a negative number you'll update to 0:
+
+DROP TRIGGER IF EXISTS no_negativeQ;
+
+DELIMITER //
+
+CREATE TRIGGER no_negativeQ
+BEFORE INSERT 
+ON orders FOR EACH ROW
+BEGIN
+	IF NEW.Quantity < 0 THEN -- In a trigger you'll have two operators to track the value modification (NEW and OLD).
+		SET NEW.Quantity = 0;
+	END IF;
+END //
+
+DELIMITER ;
+
+INSERT INTO orders VALUES (11, 'Cl11','P11',-5,69,'2020-04-26');  -- TEST the trigger
+SELECT * FROM meta_lucky_shrub_my.orders; -- check if it's working (OK)
+
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------- SCHEDULED EVENTS --------------------------------------------------------------------------------------------
+-- Events that must be completed at a specific time (creation of reports or logs)
+-- They can be executed onw time or recurring
+
+/* One-time scheduled event syntax
+CREATE event_name
+ON SCHEDULE AT CURRENT_TIMESTAMP [+ INTERVAL]
+DO
+BEGIN
+	Evente_body
+END
+*/
+
+-- This table should be created to make the Report of the data.
+-- IN the current date and time the schedule event will insert into the reportdata table all records of the orders table filtered by dates specified.
+
+DROP TABLE IF EXISTS reportdata;  -- This table was created just to help with tasks of the Scheduled event.
+CREATE TABLE reportdata (OrderID INT, ClientID VARCHAR(4), ProductID VARCHAR(4), Quantity INT, Cost DECIMAL(10,2), `Date` DATE);
+
+DROP EVENT IF EXISTS RevenueReport1one; -- One time scheduled event.
+
+DELIMITER //
+
+CREATE EVENT RevenueReport1one
+ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 2 MINUTE
+DO
+BEGIN
+	INSERT INTO reportdata (OrderID, ClientID, ProductID, Quantity, Cost, `Date`)
+	SELECT *
+    FROM orders
+    WHERE `Date` BETWEEN '2020-09-01' AND '2020-09-07';
+END //
+
+DELIMITER ;
+
+SELECT * FROM meta_lucky_shrub_my.reportdata; -- check if it's working (OK)
+
