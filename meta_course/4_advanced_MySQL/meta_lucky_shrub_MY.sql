@@ -77,7 +77,7 @@ SELECT GetTotalCost(800); -- As the cost is greater then 500 the function will a
 
 DROP FUNCTION GetTotalCost; -- To DROP the FUNCTION
 
--- -------------------------------------------------------------------------------------- More complex Procedures ----------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------- Procedures ----------------------------------------------------------------------------------
 -- GetProductSummary
 -- This procedure return the quantity of the produts that cost less than 50 dolars and the quantity of the products that cost more or equal a 50 dolars.
 
@@ -257,7 +257,7 @@ SELECT @priceAfterDiscount2; -- ok (output a variable in the procedure but fist 
 
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- ----------------------------------------------------------------------- TRIGGERS -------------------------------------------------------------------------------------------
--- Actions that happens after alteration on database this action can be: INSERT, UPDATE OR DELETE.alter.
+-- Actions that happens after alteration on database this action can be: INSERT, UPDATE OR DELETE.
 
 /* A TRIGGER can be invoked before of ater an action:
     -> BEFORE = TRIGGER -> ACTION -> ROW (
@@ -265,13 +265,12 @@ SELECT @priceAfterDiscount2; -- ok (output a variable in the procedure but fist 
 The syntax from both (bafore and after) triggers are the same.
 */
 /* MySQL TRIGGER syntax:
+
 CREATE TRIGGER trigger_name
 BEFORE INSERT -- Here you should specify when the TRIGGER will work (before or after) and the command to look (insert, delete or update)
 ON table_name FOR EACH ROW -- A table to watch and how the trigger will perform (in each row of the table)
-BEGIN
-	
+BEGIN	
 END
-
 */
 
 -- For exemple: let's say that Luck Shrub need that none negative number can be inputed in the orders.Quantity field and if it's a negative number you'll update to 0:
@@ -293,6 +292,8 @@ DELIMITER ;
 
 INSERT INTO orders VALUES (11, 'Cl11','P11',-5,69,'2020-04-26');  -- TEST the trigger
 SELECT * FROM meta_lucky_shrub_my.orders; -- check if it's working (OK)
+
+SHOW TRIGGERS FROM meta_lucky_shrub_my; -- SHOW ALL TRIGGERS
 
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- -------------------------------------------------------------- SCHEDULED EVENTS --------------------------------------------------------------------------------------------
@@ -351,14 +352,150 @@ DROP EVENT IF EXISTS DailyRestock;
 
 DELIMITER //
 
-CREATE EVENT recurringEvent
-ON SCHEDULE EVERY 1 DAY DO -- To set a recurring event you should use the 'EVERY'  (Every one day this evente occours)
+CREATE EVENT DailyRestock
+ON SCHEDULE EVERY 1 MINUTE DO -- To set a recurring event you should use the 'EVERY'  (Every one day this evente occours)
 BEGIN
 	IF (products.NumberOfItems) < 50 THEN
-		UPDATE products SET NumberOfItems = 50; 
+		UPDATE products SET NumberOfItems = 50 WHERE NumberOfItems <50; 
 	END IF;
-
 END //
 
+DELIMITER ;
 
 SELECT * FROM meta_lucky_shrub_my.products;
+SHOW EVENTS from meta_lucky_shrub_my; -- Look all the scheduled events in meta_lucky_shrub_my database
+
+-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------- Laboratory (Triggers)  ---------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- THE MAIN OBJECTIVE OF THIS LABORATORY IS TO DEVELOP INSERT, UPDATE AND DELETE triggers (each task uses one of them)
+-- This laboratory creates a new database but i choosed to alter this one becouse is very simillar to the new.
+
+ALTER TABLE  meta_lucky_shrub_my.products ADD COLUMN BuyPrice DECIMAL(10,2);
+ALTER TABLE meta_lucky_shrub_my.products RENAME COLUMN Price TO SellPrice;
+
+UPDATE products SET BuyPrice = 40 WHERE ProductID = 'P1';
+UPDATE products SET BuyPrice = 15 WHERE ProductID = 'P2';
+UPDATE products SET BuyPrice = 35 WHERE ProductID = 'P3';
+UPDATE products SET BuyPrice = 7 WHERE ProductID = 'P4';
+UPDATE products SET BuyPrice = 35 WHERE ProductID = 'P5';
+UPDATE products SET BuyPrice = 65 WHERE ProductID = 'P6';
+UPDATE products SET BuyPrice = 120 WHERE ProductID = 'P7';
+
+SELECT * FROM meta_lucky_shrub_my.products; -- check the new column and fields
+
+-- Create the Notifications table
+
+CREATE TABLE Notifications (
+NotificationID INT AUTO_INCREMENT, 
+Notification VARCHAR(255), 
+`DateTime` TIMESTAMP NOT NULL, 
+PRIMARY KEY(NotificationID));
+
+/* Task 1: Create an INSERT trigger called ProductSellPriceInsertCheck. This trigger must check if the SellPrice of the product is less than the BuyPrice after a new product is inserted in the Products table.
+ If this occurs, then a notification must be added to the Notifications table to inform the sales department. The sales department can then ensure that the incorrect values were not inserted by mistake.
+
+The notification message should be in the following format: A SellPrice less than the BuyPrice was inserted for ProductID + ProductID
+The expected output result should be the same as that generated by the values for the ProductID P7 in the following screenshot.
+*/
+
+DROP TRIGGER IF EXISTS ProductSellPriceInsertCheck;
+
+DELIMITER //
+
+CREATE TRIGGER ProductSellPriceInsertCheck
+	AFTER INSERT
+	ON Products FOR EACH ROW
+	BEGIN
+	IF NEW.SellPrice <= NEW.BuyPrice THEN
+		INSERT INTO Notifications(Notification,DateTime) 
+		VALUES(CONCAT(' The product with ID ', NEW.ProductID, ' has the BuyPrice grather than the SellPrice'), NOW());
+	END IF;
+	END //
+DELIMITER ;
+
+SHOW TRIGGERS FROM meta_lucky_shrub_my; -- look if the trigger was created and the table that he looks
+
+INSERT INTO products VALUES ('P8','Cadeira Gamer',130,15,140);  -- test
+REPLACE INTO products VALUES ('P9','Headset bluetooth',5,40,20);  -- test
+
+delete from products where ProductID = 'P8';  -- test
+delete from products where ProductID = 'P9'; -- test
+
+
+SELECT * FROM meta_lucky_shrub_my.notifications; -- test
+SELECT * FROM meta_lucky_shrub_my.products;  -- test
+
+show columns from products;  -- test
+truncate table notifications;  -- test
+
+/* Task 2: Create an UPDATE trigger called ProductSellPriceUpdateCheck. This trigger must check that products are not updated with a SellPrice that is less than or equal to the BuyPrice. 
+If this occurs, add a notification to the Notifications table for the sales department so they can ensure that product prices were not updated with the incorrect values. 
+This trigger sends a notification to the Notifications table that warns the sales department of the issue.
+
+The notification message should be in the following format: ProductID + was updated with a SellPrice of  + SellPrice + which is the same or less than the BuyPrice
+The expected output result should be the same as that generated by the values for the ProductID P6 in the following screenshot. 
+*/
+
+DROP TRIGGER IF EXISTS ProductSellPriceUpdateCheck;
+
+DELIMITER //
+
+CREATE TRIGGER ProductSellPriceUpdateCheck
+AFTER UPDATE
+ON products FOR EACH ROW
+	BEGIN 
+		IF NEW.SellPrice <= NEW.BuyPrice THEN
+			INSERT INTO Notifications(notification, datetime) 
+            VALUES (CONCAT('The Product with the ProductID of ',NEW.ProductID,' has the buy value (',NEW.BuyPrice,') greater or equal to the sell value (',NEW.SellPrice,')'),NOW());
+        END IF;
+	END //
+
+DELIMITER ;
+
+SHOW TRIGGERS FROM meta_lucky_shrub_my; 
+
+UPDATE products set BuyPrice = 55 Where ProductID = 'P5';  -- test
+UPDATE products set BuyPrice = 45 Where ProductID = 'P3'; -- test
+
+SELECT * FROM meta_lucky_shrub_my.notifications; -- test
+SELECT * FROM meta_lucky_shrub_my.products;  -- test
+
+
+truncate table notifications;  -- test
+
+
+/*Task 3: Create a DELETE trigger called NotifyProductDelete. This trigger must insert a notification in the Notifications table for the sales department after a product has been deleted from the Products table.
+
+The notification message should be in the following format: The product with a ProductID  + ProductID + was deleted
+The expected output result should be the same as that in the following screenshots:
+*/
+
+
+DROP TRIGGER IF EXISTS NotifyProductDelete;
+
+DELIMITER //
+
+CREATE TRIGGER NotifyProductDelete
+AFTER DELETE
+ON products FOR EACH ROW
+	BEGIN 
+			INSERT INTO Notifications(notification, datetime) 
+            VALUES (CONCAT('The Product with the ProductID of ',OLD.ProductID,' was deleted'),NOW());
+	END //
+
+DELIMITER ;
+
+SHOW TRIGGERS FROM meta_lucky_shrub_my; 
+
+DELETE FROM products WHERE ProductID = 'P5'; -- test
+
+truncate table notifications;  -- test
+SELECT * FROM meta_lucky_shrub_my.notifications; -- test
+SELECT * FROM meta_lucky_shrub_my.products;  -- test
+
+
+
+
+
+
