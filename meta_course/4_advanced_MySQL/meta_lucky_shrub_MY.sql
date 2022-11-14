@@ -299,7 +299,7 @@ SELECT * FROM meta_lucky_shrub_my.orders; -- check if it's working (OK)
 -- Events that must be completed at a specific time (creation of reports or logs)
 -- They can be executed onw time or recurring
 
-/* One-time scheduled event syntax
+/* One-time scheduled event syntax -----------------------------------------------------------------------------------------
 CREATE event_name
 ON SCHEDULE AT CURRENT_TIMESTAMP [+ INTERVAL]
 DO
@@ -308,11 +308,13 @@ BEGIN
 END
 */
 
--- This table should be created to make the Report of the data.
+-- This table should be created to make the Report of the data obout the orders table.
 -- IN the current date and time the schedule event will insert into the reportdata table all records of the orders table filtered by dates specified.
 
 DROP TABLE IF EXISTS reportdata;  -- This table was created just to help with tasks of the Scheduled event.
 CREATE TABLE reportdata (OrderID INT, ClientID VARCHAR(4), ProductID VARCHAR(4), Quantity INT, Cost DECIMAL(10,2), `Date` DATE);
+
+-- Example:
 
 DROP EVENT IF EXISTS RevenueReport1one; -- One time scheduled event.
 
@@ -332,3 +334,31 @@ DELIMITER ;
 
 SELECT * FROM meta_lucky_shrub_my.reportdata; -- check if it's working (OK)
 
+/* Recurring scheduled event syntax ----------------------------------------------------------------------------------------------
+
+CREATE EVENT event_name
+ON SCHEDULE
+EVERY [+ INTERVAL]
+DO
+BEGIN
+	event_body
+END
+*/
+
+-- Example:
+
+DROP EVENT IF EXISTS DailyRestock;
+
+DELIMITER //
+
+CREATE EVENT recurringEvent
+ON SCHEDULE EVERY 1 DAY DO -- To set a recurring event you should use the 'EVERY'  (Every one day this evente occours)
+BEGIN
+	IF (products.NumberOfItems) < 50 THEN
+		UPDATE products SET NumberOfItems = 50; 
+	END IF;
+
+END //
+
+
+SELECT * FROM meta_lucky_shrub_my.products;
