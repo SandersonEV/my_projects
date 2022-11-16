@@ -96,6 +96,27 @@ SET @order_id = 10;
 EXECUTE GetOrderStatement USING @order_id;
 SELECT ClientID, ProductId, Quantity, Cost FROM orders WHERE OrderID = @order_id; -- check (This is the same thing but now i wrote the entire code)
 
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------- JSON -----------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE Activity(
+ActivityID INT PRIMARY KEY,
+Properties JSON -- JSON provides database optimization by storing data in simple text format.
+);
+
+INSERT INTO Activity(ActivityID, Properties) VALUES
+(1, '{"ClientID": "Cl1", "ProductID":"P1", "Order": "True"}'),
+(2, '{"ClientID": "Cl2", "ProductID":"P2", "Order": "False"}'),
+(3, '{"ClientID": "Cl3", "ProductID":"P3", "Order": "True"}'); -- (The use of ' or " metters here)
+
+-- To retrieve de data inside of the JSON list in the table:
+
+SELECT ActivityID, Properties->'$.ClientID' 'ClientID', Properties->'$.ProductID' AS 'ProductID', Properties->'$.Order' FROM Activity;
+
+
+
+
 
 
 
