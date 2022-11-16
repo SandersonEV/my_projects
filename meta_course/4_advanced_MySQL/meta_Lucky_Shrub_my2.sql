@@ -112,5 +112,7 @@ Follow these steps first and then rewrite the SELECT query and improve its perfo
 SELECT * FROM Employees;
 ALTER TABLE employees ADD ReverseFullName VARCHAR(255);
 UPDATE employees SET ReverseFullName = CONCAT(SUBSTRING_INDEX(FullName,' ', -1), ' ', SUBSTRING_INDEX(FullName, ' ', 1)); -- THIS FUNCTION WORKS WELL only WEN THE FULLNAME HAS ONLY 2 NAMES WITHIN.
+CREATE INDEX IdxReverseFullName on EMPLOYEES(ReverseFullName);
 
 SELECT * FROM Employees WHERE ReverseFullName LIKE 'Tolo%'; -- Now we can repeat the same quary but using the reverse and more optimized (uses a trailing wildcard instead of the leading wild card)
+EXPLAIN SELECT * FROM Employees WHERE ReverseFullName LIKE 'Tolo%';
