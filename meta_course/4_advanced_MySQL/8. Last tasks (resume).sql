@@ -194,11 +194,26 @@ This new record of data must contain a new ID and the current date and time.
 
 You can help Lucky Shrub by creating a trigger called UpdateAudit. This trigger must be invoked automatically AFTER a new order is inserted into the Orders table.
 Remember: The AuditID is an auto increment key. Therefore, you don't need to insert it manually.
-For example, when you insert three new orders in the Orders table, then three records of data are automatically inserted into the Audit table. This is shown in the following screenshot:
-Output for Audit table
+For example, when you insert three new orders in the Orders table, then three records of data are automatically inserted into the Audit table.
 */
 
+DROP TRIGGER IF EXISTS UpdateAudit;
 
+DELIMITER //
+
+CREATE TRIGGER UpdateAudit
+AFTER INSERT
+ON orders FOR EACH ROW
+BEGIN 
+	INSERT INTO audit (OrderDateTime) VALUES (Current_timestamp);
+END //
+
+DELIMITER ;
+
+SELECT * FROM meta_lucky_shrub_my4.orders;
+SELECT * FROM meta_lucky_shrub_my4.audit;
+
+INSERT INTO orders VALUES (32, 'Cl3','P3','5','200',Current_timestamp);
 
 /* Task 4: Lucky Shrub need location data for their clients and employees. To help them out, create an optimized query that outputs the following data:
 
@@ -208,9 +223,14 @@ The data should be ordered by the street name. The output result is shown in the
 Table displaying columns of full name, street and county 
 */
 
+SELECT 'Cliente' AS 'Tipo de Relação', c.FullName 'Nome Completo', a.Street 'Endereço', a.County
+FROM clients c INNER JOIN addresses a ON (c.AddressID = a.AddressID)
+UNION
+SELECT 'Funcionário' AS 'Tipo de Relação', e.FullName 'Nome Completo', a.Street 'Endereço', a.County
+FROM employees e INNER JOIN addresses a ON (e.AddressID = a.AddressID) ORDER BY Endereço; -- The order by comes only at the end of the union.
 
-
-/* Task 5: Lucky Shrub need to find out what quantities of wood panels they are selling. The wood panels product has a Product ID of P2. The following query returns the total quantity of this product as sold in the years 2020, 2021 and 2022:
+/* Task 5: Lucky Shrub need to find out what quantities of wood panels they are selling. The wood panels product has a Product ID of P2. The following query returns the total quantity of this product as 
+sold in the years 2020, 2021 and 2022:
 
 12345
 SELECT CONCAT (SUM(Cost), " (2020)") AS "Total sum of P2 Product" FROM Orders WHERE YEAR (Date) = 2020 AND ProductID = "P2" 
@@ -218,19 +238,23 @@ UNION
 SELECT CONCAT (SUM(Cost), "(2021)") FROM Orders WHERE YEAR (Date) = 2021 AND ProductID = "P2" 
 UNION 
 SELECT CONCAT (SUM (Cost), "(2022)") FROM Orders WHERE YEAR (Date) = 2022 AND ProductID = "P2";
-The output of this query is shown in the following screenshot:
 
-Screenshot of output of total sum for a product
 Your task is to optimize this query by recreating it as a common table expression (CTE).
 */
 
-
-
+WITH
+quant_wood_2020 AS (SELECT CONCAT (SUM(Cost), " (2020)") AS "Total sum of P2 Product" FROM Orders WHERE YEAR (Date) = 2020 AND ProductID = "P2"),
+quant_wood_2021 AS (SELECT CONCAT (SUM(Cost), " (2021)") FROM Orders WHERE YEAR (Date) = 2021 AND ProductID = "P2"),
+quant_wood_2022 AS (SELECT CONCAT (SUM(Cost), " (2022)") FROM Orders WHERE YEAR (Date) = 2022 AND ProductID = "P2")
+SELECT * FROM quant_wood_2020
+UNION 
+SELECT * FROM quant_wood_2021
+UNION 
+SELECT * FROM quant_wood_2022;
 
 /* Task 6:
 Lucky Shrub want to know more about the activities of the clients who use their online store. The system logs the ClientID and the ProductID information for each activity in a JSON Properties column inside the Activity table. This occurs while clients browse through Lucky Shrub products online. The following screenshot shows the Activity table.
 
-Screenshot of output of activity
 Utilize the Properties data to output the following information:
 The full name and contact number of each client from the Clients table.
 The ProductID for all clients who performed activities.
@@ -242,6 +266,9 @@ The output result of this query is shown in the screenshot below:
 Information extracted from the Clients, Products and Contact Numbers
 */
 
+SELECT c.FullName, c.ContactNumber, a.Properties->'$.ProductID' 'ID do Produto'
+FROM clients c INNER JOIN activity a
+ON (c.ClientID = a.Properties->>'$.ClientID'); -- IMPORTANT: use '->>' to see the data without the double quotations and with only '->' too see with the double quotation.
 
 
 /* Task 7: Lucky Shrub need to find out how much revenue their top selling product generated. 
