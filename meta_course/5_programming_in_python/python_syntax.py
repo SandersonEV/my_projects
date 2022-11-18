@@ -12,7 +12,7 @@ a = 1 ; b  = -1 #int
 a = 1.1 ; b = -1.1 #float
 a = 10 + 10j # complex number
 # SEQUENCE
-a = 'Sand' #str
+a = 'Sand' #string is a sequence of caracteres
 a = [1, 'say', 23, 4.2, 10+ 10j] #list
 a = (1, 'say', 23, 4.2, 10+ 10j) #Tuples = Are like the list but can not be modified
 # BOOLEAN
