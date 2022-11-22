@@ -1,0 +1,10 @@
+Esse � um teste apenas para criar um novo arquivo de texto de exemplo.
+
+(Creating a new file from 2_class.ipynb)
+Esse e um teste para adicao de novas linhas.
+(append new lines to 2_newFile.txt)
+Esse e um teste para adicao de novas linhas.
+(append new lines to 2_newFile.txt)
+
+Esse e um teste para adicao de novas linhas.
+(append new lines to 2_newFile.txt)
