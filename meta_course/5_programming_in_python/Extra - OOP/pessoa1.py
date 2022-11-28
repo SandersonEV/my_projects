@@ -12,7 +12,7 @@ class Pessoa:
 
     ano_atual = int(datetime.strftime(datetime.now(), '%Y')) # variável da classe que pode ser chamada na main
 
-    def __init__(self, nome, idade, comendo = False, falando = False):
+    def __init__(self, nome, idade, comendo = False, falando = False): # SPECIAL METHOD
         self.nome = nome # variáveis da instância
         self.idade = idade
         self.comendo = comendo
@@ -22,7 +22,7 @@ class Pessoa:
         print(f'Usuário {self.nome} criado com sucesso')
         return
     
-    def comer(self, alimento):
+    def comer(self, alimento): # METHOD = A method it's just a function inside of a class
 
         if self.comendo == True: # If the parameter 'comendo' is set to true and you try to call the function
             print(f'{self.nome} já está comendo {alimento}')

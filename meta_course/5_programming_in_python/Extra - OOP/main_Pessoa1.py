@@ -1,4 +1,4 @@
-from pessoaa import Pessoa # the first name after the from means the name of the file and the name after import means the class name.
+from pessoa1 import Pessoa # the first name after the from means the name of the file and the name after import means the class name.
 
 p1 = Pessoa('Lucas', 23) # Criando um novo objeto p1 pertencente à classe Pessoa
 p2 = Pessoa('Pedro', 34)
@@ -28,5 +28,4 @@ print(p4.nome, p4.idade, '\n')
 print(Pessoa.gera_id(), '\n') # A function from the class Pessoa that do not need any parameter to happen.
 
 print(p1.gera_id(), '\n') # I can call also using the instance 'p1'
-
 
