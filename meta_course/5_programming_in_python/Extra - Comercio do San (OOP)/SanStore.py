@@ -8,7 +8,7 @@ class Produtos:
 
     list_produtos_obj = []
 
-    def __init__(self,nome:str , preco:float, quantidade:int, aviso_de_quantidade = 0):
+    def __init__(self,nome:str , preco:float, quantidade:int, aviso_de_quantidade = 0): #Inicializar
         # validações:
         assert preco >= 0, f'{nome}: Preço (R${preco}) não pode ser negativo'
         assert quantidade >=0, f'{nome}: Quantidade ({quantidade}) não pode ser negativa'
@@ -23,27 +23,30 @@ class Produtos:
         return print(f'(RETORNO) Produto ({self.nome}) criado com sucesso.')
 
     def deletar_produto(self):
+
+        if isinstance(self, Computadores) == True: # Se o objeto (self) for pertencente à classe Computadores:
+            Computadores.list_computadores_obj.remove(self)
+
         Produtos.list_produtos_obj.remove(self)
-        antigo_del = self.nome
-        del self
-        return print(f'(RETORNO) Produto ({antigo_del}) deletado.')
+        del self # Mesmo que o objeto (self) pertença à classe Computadores(Produtos) apenas um objeto é criado. Sendo assim, o objeto precisa ser indicado após o comando 'del' somente uma vez.
+        return print('(RETORNO) Produto removido.')
 
     def adicionar_quantidade(self, quantidade:int):
         #validações:
         assert quantidade > 0, f'(AVISO) A quantidade ({quantidade}) não pode ser negativa'
 
         self.quantidade = (self.quantidade + quantidade)
-        return print(f'(RETORNO) {quantidade} unidades adicinadas ao produto: {self.nome}. Estoque final: {self.quantidade} unidades.')
+        return print(f'(RETORNO) {quantidade} unidades adicinadas ao produto: {self.nome}.')
 
     def remover_quantidade(self, quantidade:int):
         #validações:
         assert quantidade > 0, f'(AVISO) A quantidade ({quantidade}) não pode ser negativa'
-        assert self.quantidade > quantidade, f'(AVISO) Estoque de {self.nome} insuficiente para remover {quantidade} itens. Estoque atual: {self.quantidade} itens'
+        assert self.quantidade > quantidade, f'(AVISO) Estoque de {self.nome} insuficiente para remover {quantidade} itens.'
 
         self.quantidade = self.quantidade - quantidade
         if self.quantidade <= self.aviso_de_quantidade:
-            print(f'(AVISO) {self.nome} com o estoque baixo ({self.quantidade}). Fazer pedido para renovar o estoque')
-        return print(f'(RETORNO) {quantidade} unidades removidas do produto: {self.nome}. Estoque final: {self.quantidade} unidades')      
+            print(f'(AVISO) {self.nome} com o estoque baixo ({self.quantidade} und).')
+        return print(f'(RETORNO) {quantidade} unidades removidas do produto: {self.nome}.')      
     
     def atualizar_preco(self, novo_preco:float):
         #validações:
@@ -71,10 +74,14 @@ class Produtos:
         return self
 
     @classmethod
-    def ListOfDicts_produtos(cls):
+    def ListOfDicts_produtos(cls): # Essa lista deve conter apenas as colunas comuns a classe Produtos. Sendo assim, devemos limpar as colunas referentes a classe Computadores.
         y = []
         for x in cls.list_produtos_obj:
-            y.append(x.__dict__)   
+            if isinstance(x, Computadores): # Caso o objeto va vez pertença à classe Computadores:
+                g = {chave: valor for (chave,valor) in x.__dict__.items() if chave not in ['ram','processador','placa_video']} #DICTIONARY COMPREHENSION:
+                y.append(g) 
+            else:
+                y.append(x.__dict__)   
         return y
 
     @classmethod
@@ -150,16 +157,22 @@ class Clientes:
     def cpf(self, valor):
         self._cpf = str((valor.replace('.','')).replace('-',''))
     
-    def __eq__(self, other):
+    def __eq__(self, other): # Para que dois usuários sejam iguais o cpf é que deve ser o comparadaro
         return self.cpf == other.cpf
 
     def remover_cliente(self):
         Clientes.list_clients_obj.remove(self)
         del self
      
-    def buscar_cliente(self):
+    def buscar_cliente(self): # Esse Metodo auxilia nos momentos em que o objeto precisa ser referenciado em outro lugar
         return self
     
+    @classmethod
+    def sortear_cliente(cls):
+        sorteado = rd.choice(cls.list_clients_obj)
+        return print(f'O sorteado foi {sorteado.nome} portador do CPF: {sorteado.cpf}')
+
+
     @classmethod
     def listDict_clientes(cls):
         i = []
@@ -171,3 +184,41 @@ class Clientes:
     def dataframe_clientes(cls):
         df = pd.DataFrame(cls.listDict_clientes())
         return df
+
+class Computadores(Produtos): # Filho(Pai) 
+
+    list_computadores_obj = []
+
+    def __init__(self, nome: str, preco: float, quantidade: int,ram: str, processador: str,placa_video: bool = False, aviso_de_quantidade = 0):
+        super().__init__(nome, preco, quantidade, aviso_de_quantidade)
+        self.ram = ram
+        self.placa_video = placa_video
+        self.processador = processador
+        Computadores.list_computadores_obj.append(self) 
+        # precisa de return ja que é um subclasse?
+
+    # O objeto criado sera pertencente à classe Computadores(Produtos).
+
+    def remover_computador(self):
+        return Produtos.deletar_produto(self)
+
+    @classmethod
+    def listDict_Computadores(cls):
+        z = []
+        for x in cls.list_computadores_obj:
+            z.append(x.__dict__)
+            return z
+    
+    @classmethod
+    def dataframe_computadores(cls):
+        df = pd.DataFrame(cls.listDict_Computadores())
+        return df
+
+''' 
+Implementações futuras:
+
+- Random ID
+- Buscar e deletar através do ID
+- Random ID != dos existentes
+
+'''
