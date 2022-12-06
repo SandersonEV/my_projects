@@ -21,5 +21,6 @@ Julho = Chefs('Julho', 'F')
 
 emily.leave_requests(3)
 print(adrian.password)
+print(emily.name)
 
 # When you define a parent/child you are shortning your code to reuse things from your parent in your child class.
