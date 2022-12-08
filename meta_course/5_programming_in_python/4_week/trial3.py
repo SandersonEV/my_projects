@@ -1,0 +1,1 @@
+print('Iai galera, tudo tranquilo?')
