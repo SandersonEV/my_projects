@@ -1,6 +1,13 @@
 {
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "sand_projects_39b64ced"
+        },
+        {
             "name": "Python: File",
             "type": "python",
             "request": "launch",
