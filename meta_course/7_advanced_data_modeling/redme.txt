@@ -1,0 +1,17 @@
+--------------------------- Overview of data modeling ----------------------------------------
+(A data model provides a visual representation of an element and shows how they relate to the others)
+
+1 - Conceptual data model: Entity and relationship...
+2 - Logical data model: Specify  all attibutes that the Entity contains, Primary key and Foreign key...
+3 - Physical data model: Data types , Constraints and Attributes -> INT, VACHAR(100), NOT NULL, PRIMARY KEY... (final model)
+
+---------------------------- Types of data models ----------------------------------------------
+
+1 - Relational data model:
+ - It represents the database as a colection of relations.
+ - It is much simple then the other models because you can quickly identify and access data.
+
+2 - Entity relationship data model (one to one, one to may and many to many)
+3 - Hierarchical data model (like a thee - can only be used to one to many or one to one relations)
+4 - Object-oriented data model (more complicated)
+5 - Dimensional data model
